@@ -67,7 +67,47 @@ var Xhr = {
   	
     	return this;
     },
-
+	stream: function(url,options,callback) {
+		options = x$.extend({method: 'get', async: true, data: null, delimiter: "@END@"}, options || {});
+        var req = new XMLHttpRequest();
+		
+		if (options.headers) {
+            for (var i=0; i<options.headers.length; i++) {
+              req.setRequestHeader(options.headers[i].name, options.headers[i].value);
+            }
+        }
+		req.open(options.method, url, options.async);
+		var ping = null,
+			boundary = null,
+			lastLength = 0,
+			pingRef = null,
+			ping = function() {
+				var length = req.responseText.length,
+					packet = req.responseText.substring(lastLength,length);
+				
+				
+			}
+		req.onreadystatechange = function() {
+			if (req.readyState == 3  && pingRef == null) {
+            	// Make sure Content Type is multipart
+				var contentType = this.req.getResponseHeader("Content-Type");
+				if (contentType.indexOf("multipart/mixed") == -1) {
+					req.onreadystatechange = function(){};
+					throw new Error("Response Content-Type should be 'multipart/mixed'");
+				}
+				boundary = "--"+contentType.split('"')[1];
+				pingRef = window.setInterval(handleChunk,15);
+			}
+			if (req.readyState == 4) {
+				// We're done
+				handleChunk();
+			}
+		}
+		
+		
+		
+		
+	},
 	/**
 	 * 
 	 * Another twist on remoting: lightweight and unobtrusive DOM databinding. Since we are often talking to a server with 
