@@ -296,6 +296,18 @@ describe("XHR.json", {
 	
 });
 
+describe("XHR.stream", {
+	'before':function(){
+		x = x$("#xhr-test-stream");
+	},
+	'should get stream packets': function() {
+		var index = 1,
+			prefix = "stream-";
+		x.xhrstream('xhrstreamtest.txt', {callback: function(message) { document.getElementById(prefix+index++).innerHTML = message; }});
+		value_of(document.getElementById('stream-1').innerHTML).should_match(/test1/);
+		value_of(document.getElementById('stream-2').innerHTML).should_match(/test2/);
+	}
+})
 
 /////////////////////////////
 // 			   FX SPECS        //
@@ -378,6 +390,10 @@ describe( 'xui extend', {
 		<div id="json-name">no name here</div>
   </div>
   <div id="xhr-test-form"></div>
+  <div id="xhr-test-stream">
+  	<div id="stream-1">nothing</div>
+	<div id="stream-2">nothing</div>
+  </div>
 </div>
 
 <div id="event_tests">

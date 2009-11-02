@@ -38,7 +38,7 @@ desc 'opens up the specs'
 task :spec => :min do
   puts 'running automated test suite'
   spec_file = File.join(LIBPATH, 'spec', 'index.html')
-  sh "open -a WebKit file://#{spec_file}"
+  sh "open -a Safari file://#{spec_file}"
   sh "open -a '/Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone Simulator.app' file://#{spec_file}"
 end
 
@@ -57,7 +57,7 @@ end
 desc 'launches the semi official but seriously example app example'
 task :example => :build do
   example_file = File.join(LIBPATH, 'example', 'index.html')
-  sh "open -a WebKit #{example_file}"
+  sh "open -a Safari #{example_file}"
 end 
 
 #
@@ -80,5 +80,5 @@ task :doc => :build do
   index_file = File.join(LIBPATH, 'doc', 'index.html')
   open(index_file, 'w') { |f| f.puts(BlueCloth.new(readme).to_html) }
   # launch docs in safari
-  sh "open -a WebKit #{index_file}"
+  sh "open -a Safari #{index_file}"
 end
